@@ -36,17 +36,9 @@ module TailIO
 end
 IO.send(:include, TailIO)
 
-class DatePoint
-  def initialize(point)
-    @point = point
-  end
-end
-
 class LogParser
   SPHINXQL = /\/\*(?<date>.+)conn.+(?<time>\d+\.\d+).+(?<found>\d+)\s\*\/.+(?:from |FROM )(?<index>\w+)/
   PLAIN = /\[(?<date>.+?)\]\s(?<time>\d+\.\d+).+\s(?<found>\d+)\s\(.+\[(?<index>\w+)\]/
-
-  attr_reader :points_found
 
   def initialize(file)
     @file = file
