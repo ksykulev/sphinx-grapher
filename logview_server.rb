@@ -1,4 +1,4 @@
-require 'Date'
+require 'date'
 require 'webrick'
 require 'erb'
 require 'bigdecimal'
