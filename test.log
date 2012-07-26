@@ -1,0 +1,2 @@
+[Tue Jul  3 17:47:31.814 2012] 0.003 sec [ext2/0/ext 11 (0,20) @contact_crc] [assets]
+/* Mon Jul 16 13:56:42.312 2012 conn 7 wall 0.002 found 1219 */ SELECT bucket, client_name, cname, cid, content_id, i1, i2, i3, i4, filename FROM assets WHERE published=1 deleted=0 ORDER BY created DESC LIMIT 0,100;

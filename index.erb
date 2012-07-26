@@ -1,0 +1,67 @@
+<!DOCTYPE HTML>
+<html>
+	<body>
+		<div id="container" style="width:800px;height:600px;"></div>
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
+		<script type="text/javascript">
+			$(function () {
+				var chart = new Highcharts.Chart({
+					chart: {
+						renderTo: 'container'
+					},
+					title: { text: 'Sphinx Mean Query Time (<%= indexes.inject(0){|res, (name, points)| res + points.length } %> queries)' },
+					xAxis: {
+						type: 'datetime',
+						title: {
+							text: 'Date'
+						}
+					},
+					yAxis: {
+						title: {
+							text: 'Mean Query Time (seconds)'
+						},
+						startOnTick: false,
+						showFirstLabel: false
+					},
+					plotOptions: {
+						area: {
+							lineWidth: 1,
+							shadow: false,
+							states: {
+								hover: {
+									lineWidth: 1
+								}
+							},
+							marker: {
+								enabled: false,
+								states: {
+									hover: {
+										enabled: true,
+										radius: 5
+									}
+								}
+							}
+						}
+					},
+					tooltip: { shared: true },
+					series: [
+					<% indexes.each do |name, points| %>
+						<% unless points.empty? %>
+							{
+								type: 'area',
+								name: '<%= "#{name} (#{points.length})" %>',
+								data: [
+									<% points.each do |date, point| %>
+										<%= "[#{date}, #{(point.reduce(:+) / point.length)}]," if point.length > 0 %>
+									<% end %>
+								]
+							},
+						<% end %>
+					<% end %>
+					]
+				});
+			});
+		</script>
+	</body>
+</html>
