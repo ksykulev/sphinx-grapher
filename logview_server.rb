@@ -40,8 +40,11 @@ class LogParser
   SPHINXQL = /\/\*(?<date>.+)conn.+(?<time>\d+\.\d+).+(?<found>\d+)\s\*\/.+(?:from |FROM )(?<index>\w+)/
   PLAIN = /\[(?<date>.+?)\]\s(?<time>\d+\.\d+).+\s(?<found>\d+)\s\(.+\[(?<index>\w+)\]/
 
+  attr_reader :pre_format_lines
+
   def initialize(file)
     @file = file
+    @pre_format_lines = 0
   end
 
   def formatted_points(points)
@@ -54,6 +57,7 @@ class LogParser
         date_key = "new Date('#{time.year}','#{time.month-1}','#{time.day}','#{time.hour}','#{time.min}').getTime()"
         value = Float(match['time'])
         unless value == 0
+          @pre_format_lines = @pre_format_lines + 1
           formatted_points[match['index']][date_key] = [] unless formatted_points[match['index']][date_key]
           formatted_points[match['index']][date_key] << value unless value == 0
         end
@@ -79,6 +83,7 @@ class Index < WEBrick::HTTPServlet::AbstractServlet
 
     lp = LogParser.new('query.log')
     indexes = lp.formatted_points(2000)
+    pre_format_lines = lp.pre_format_lines
     template = ERB.new(File.new('index.erb').read)
 
     res.body = template.result(binding)

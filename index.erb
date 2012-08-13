@@ -5,12 +5,13 @@
 		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script type="text/javascript" src="http://code.highcharts.com/highcharts.js"></script>
 		<script type="text/javascript">
+		<% data_points = indexes.inject(0){|res, (name, points)| res + points.length } %>
 			$(function () {
 				var chart = new Highcharts.Chart({
 					chart: {
 						renderTo: 'container'
 					},
-					title: { text: 'Sphinx Mean Query Time (<%= indexes.inject(0){|res, (name, points)| res + points.length } %> queries)' },
+					title: { text: 'Sphinx Mean Query Time (<%= data_points %> grouped data points: ~<%= (pre_format_lines / data_points) %> qpm)' },
 					xAxis: {
 						type: 'datetime',
 						title: {
